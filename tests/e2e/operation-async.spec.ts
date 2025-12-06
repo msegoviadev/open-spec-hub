@@ -13,7 +13,7 @@ import { test, expect } from '@playwright/test';
  */
 test.describe('AsyncAPI Operation Detail Pages', () => {
   test('SUBSCRIBE operation displays correctly', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify operation header
     await expect(page.getByRole('heading', { name: 'Subscribe to order created events' })).toBeVisible();
@@ -30,7 +30,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('PUBLISH operation displays correctly', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // Verify operation header
     await expect(page.getByRole('heading', { name: 'Publish order created event' })).toBeVisible();
@@ -41,10 +41,10 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('SUBSCRIBE operation shows output (received message) schema', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify Output heading
-    await expect(page.getByRole('heading', { name: 'Output' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Output', exact: true })).toBeVisible();
 
     // Verify message name
     await expect(page.getByRole('heading', { name: 'OrderCreated' })).toBeVisible();
@@ -61,7 +61,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('PUBLISH operation shows input (sent message) schema', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // Should show Input section for PUBLISH
     const inputHeadings = page.getByRole('heading', { name: /Input|Output/ });
@@ -74,7 +74,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('SUBSCRIBE operation displays example message (NEW FEATURE)', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify Example Response section exists
     await expect(page.getByRole('heading', { name: 'Example Response', level: 4 })).toBeVisible();
@@ -98,7 +98,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('PUBLISH operation displays example message (NEW FEATURE)', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // For PUBLISH, example should be in Input section
     await expect(page.getByRole('heading', { name: 'Example Request' })).toBeVisible();
@@ -109,7 +109,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('Event metadata section displays correctly', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify Event Metadata heading
     await expect(page.getByRole('heading', { name: 'Event Metadata' })).toBeVisible();
@@ -122,7 +122,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('PUBLISH shows "send" action in metadata', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // Verify Event Metadata
     await expect(page.getByRole('heading', { name: 'Event Metadata' })).toBeVisible();
@@ -131,7 +131,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('OrderUpdated operation displays with multiple examples', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderUpdated');
+    await page.goto('operations/subscribeOrderUpdated');
 
     // Verify operation displays
     await expect(page.getByRole('heading', { name: 'Subscribe to order updated events' })).toBeVisible();
@@ -149,7 +149,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('protocol badge shows Event for AsyncAPI', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify Event badge
     await expect(page.getByText('🟣 Event')).toBeVisible();
@@ -159,7 +159,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('array items in message schema render correctly', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify items property (use more specific selector for property name)
     await expect(page.locator('code.text-sm.font-semibold').filter({ hasText: 'items' }).first()).toBeVisible();
@@ -176,7 +176,7 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('array items render correctly in PUBLISH operation input schema', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // Verify items property in Input section
     await expect(page.locator('code.text-sm.font-semibold').filter({ hasText: 'items' }).first()).toBeVisible();
@@ -193,17 +193,17 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('back to operations button works from AsyncAPI page', async ({ page }) => {
-    await page.goto('/operations/publishOrderUpdated');
+    await page.goto('operations/publishOrderUpdated');
 
     // Click back button
     await page.getByRole('button', { name: 'Back to Operations' }).click();
 
     // Verify navigation back to homepage
-    await expect(page).toHaveURL('/');
+    await expect(page).toHaveURL(/open-spec-hub\/demo\/?$/);
   });
 
   test('breadcrumb shows correct path for AsyncAPI operation', async ({ page }) => {
-    await page.goto('/operations/publishOrderCreated');
+    await page.goto('operations/publishOrderCreated');
 
     // Verify breadcrumb
     await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toBeVisible();
@@ -213,14 +213,14 @@ test.describe('AsyncAPI Operation Detail Pages', () => {
   });
 
   test('message contentType displays correctly', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderCreated');
+    await page.goto('operations/subscribeOrderCreated');
 
     // Verify content type
     await expect(page.getByText('application/json')).toBeVisible();
   });
 
   test('enum values display in OrderUpdated schema', async ({ page }) => {
-    await page.goto('/operations/subscribeOrderUpdated');
+    await page.goto('operations/subscribeOrderUpdated');
 
     // Verify status field (has enum)
     await expect(page.locator('code.text-sm.font-semibold').filter({ hasText: 'status' })).toBeVisible();

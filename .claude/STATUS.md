@@ -1,31 +1,31 @@
 # Project Status
 
-**Last Updated**: 2025-11-15
-**Current Phase**: Phase 4 - Core Features Complete, Ready for Deployment
+**Last Updated**: 2025-12-06
+**Current Phase**: Phase 4 - Core Features Complete, All Tests Passing
 
 ---
 
 ## 🎯 RIGHT NOW
 
-**Working On**: Dual GitHub Pages Deployment
+**Working On**: E2E Test Suite Fixes
 **Status**: ✅ COMPLETE
-**Last Completed**: 2025-11-15 15:00 - Dual GitHub Pages Deployment Setup
+**Last Completed**: 2025-12-06 - All 83 E2E Tests Passing
 
 **Current Request**:
-> "I would like to put the update the current repository so that the ./out goes to /open-spec-hub/demo and the this new @index.html goes to /open-spec-hub"
+> "Continue if you have next steps" (fixing remaining search/filter test failures)
 
 **Completed Tasks**:
-- ✅ Created distinctive landing page with "Technical Clarity" design (dark theme, ~900 lines)
-- ✅ Updated next.config.mjs basePath: `/open-spec-hub` → `/open-spec-hub/demo`
-- ✅ Created build-pages.mjs automation script for dual deployment structure
-- ✅ Updated package.json build scripts (build, build:demo)
-- ✅ Verified GitHub Actions workflow compatibility
-- ✅ Successfully tested build process with correct dual-page structure
-- ✅ Removed GraphQL and KafkaJS references (OpenAPI + AsyncAPI only)
+- ✅ Fixed 'search by operation name filters results' test (used exact heading names instead of regex)
+- ✅ Fixed 'switching to Category grouping' test (scoped selectors to main content area)
+- ✅ Fixed 'grouping persists when filtering' test (scoped selectors to main content area)
+- ✅ Fixed 'changing grouping does not affect filters' test (corrected expectations based on search behavior)
+- ✅ Verified all 83 tests pass successfully (51.0s runtime)
 
-**Deliverables**:
-- Landing page: `/open-spec-hub/` (from `index.html`)
-- Demo app: `/open-spec-hub/demo/` (from `out/demo/`)
+**Test Fixes Summary**:
+- Changed regex selectors `/order created/i` to exact strings 'Publish order created event'
+- Scoped category heading selectors to `main` content area to avoid sidebar duplicates
+- Corrected test expectations: "Create new order" appears in "product" search because description contains "products"
+- Search function correctly matches: name, description, location, tags, and action type
 
 ---
 
@@ -99,10 +99,17 @@
 | REST Operations | ✅ | 13/13 | 13 |
 | AsyncAPI Operations | ✅ | 16/16 | 16 |
 | Code Examples | ✅ | 22/22 | 22 |
-| Search/Filter | ✅ | 20/20 | 20 |
-| **Total** | **✅** | **82/82** | **82** |
+| Search/Filter | ✅ | 21/21 | 21 |
+| **Total** | **✅** | **83/83** | **83** |
 
+**Runtime**: 51.0s (5 workers)
 **Unit Tests**: ❌ Not implemented
+
+**Recent Fixes** (2025-12-06):
+- Fixed strict mode violations in search/filter tests
+- Updated selectors to avoid sidebar duplicates (scoped to `main`)
+- Corrected test expectations based on search function behavior
+- All tests now passing with proper Playwright best practices
 
 ---
 

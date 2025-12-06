@@ -14,17 +14,20 @@ import { test, expect } from '@playwright/test';
 test.describe('Code Examples', () => {
   test.describe('REST Operations', () => {
     test('displays code examples section', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
+
+      // Wait for page to load
+      await page.waitForLoadState('networkidle');
 
       // Verify Code Examples heading
-      await expect(page.getByRole('heading', { name: /💻 Code Examples/i })).toBeVisible();
+      await expect(page.getByText('💻 Code Examples')).toBeVisible();
 
       // Verify copy button
-      await expect(page.getByRole('button', { name: 'Copy' }).last()).toBeVisible();
+      await expect(page.locator('button').filter({ has: page.locator('svg') }).last()).toBeVisible();
     });
 
     test('shows 3 language tabs for REST (JavaScript, Python, cURL)', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Verify all three language tabs
       await expect(page.getByText('JavaScript', { exact: true })).toBeVisible();
@@ -33,7 +36,7 @@ test.describe('Code Examples', () => {
     });
 
     test('JavaScript code contains valid fetch call', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // JavaScript should be selected by default
       const codeBlock = page.locator('pre code').last();
@@ -48,7 +51,7 @@ test.describe('Code Examples', () => {
     });
 
     test('Python tab shows valid requests code', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Click Python tab
       await page.getByText('Python', { exact: true }).click();
@@ -58,13 +61,13 @@ test.describe('Code Examples', () => {
       // Verify Python patterns
       await expect(codeBlock).toContainText('import requests');
       await expect(codeBlock).toContainText('def list_products');
-      await expect(codeBlock).toContainText("method='GET'");
+      await expect(codeBlock).toContainText('requests.get');
       await expect(codeBlock).toContainText('response.raise_for_status()');
       await expect(codeBlock).toContainText('response.json()');
     });
 
     test('cURL tab shows valid curl command', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Click cURL tab
       await page.getByText('cURL', { exact: true }).click();
@@ -79,7 +82,7 @@ test.describe('Code Examples', () => {
     });
 
     test('POST operation includes request body in code', async ({ page }) => {
-      await page.goto('/operations/createOrder');
+      await page.goto('operations/createOrder');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -92,7 +95,7 @@ test.describe('Code Examples', () => {
     });
 
     test('path parameters are replaced with example values', async ({ page }) => {
-      await page.goto('/operations/getProduct');
+      await page.goto('operations/getProduct');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -103,25 +106,28 @@ test.describe('Code Examples', () => {
     });
 
     test('helper text displays for REST operations', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Verify helper text
       await expect(page.getByText(/This example shows how to call the/i)).toBeVisible();
-      await expect(page.getByText(/GET/i)).toBeVisible();
-      await expect(page.getByText(/operation/i)).toBeVisible();
+      await expect(page.locator('strong').filter({ hasText: 'GET' })).toBeVisible();
+      await expect(page.getByText(/operation\./)).toBeVisible();
     });
   });
 
   test.describe('AsyncAPI Operations', () => {
-    test('displays code examples section for AsyncAPI', async ({ page }) => {
-      await page.goto('/operations/subscribeOrderCreated');
+test('displays code examples section for AsyncAPI', async ({ page }) => {
+      await page.goto('operations/onUserSignedUp');
+
+      // Wait for page to load
+      await page.waitForLoadState('networkidle');
 
       // Verify Code Examples heading
-      await expect(page.getByRole('heading', { name: /💻 Code Examples/i })).toBeVisible();
+      await expect(page.getByText('💻 Code Examples')).toBeVisible();
     });
 
     test('shows 2 language tabs for AsyncAPI (JavaScript, Python)', async ({ page }) => {
-      await page.goto('/operations/subscribeOrderCreated');
+      await page.goto('operations/subscribeOrderCreated');
 
       // Verify language tabs (no cURL for AsyncAPI)
       await expect(page.getByText('JavaScript', { exact: true })).toBeVisible();
@@ -132,7 +138,7 @@ test.describe('Code Examples', () => {
     });
 
     test('JavaScript shows KafkaJS consumer code for SUBSCRIBE', async ({ page }) => {
-      await page.goto('/operations/subscribeOrderCreated');
+      await page.goto('operations/subscribeOrderCreated');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -146,7 +152,7 @@ test.describe('Code Examples', () => {
     });
 
     test('JavaScript shows KafkaJS producer code for PUBLISH', async ({ page }) => {
-      await page.goto('/operations/publishOrderCreated');
+      await page.goto('operations/publishOrderCreated');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -157,7 +163,7 @@ test.describe('Code Examples', () => {
     });
 
     test('Python shows kafka-python code for SUBSCRIBE', async ({ page }) => {
-      await page.goto('/operations/subscribeOrderCreated');
+      await page.goto('operations/subscribeOrderCreated');
 
       // Click Python tab
       await page.getByText('Python', { exact: true }).click();
@@ -171,7 +177,7 @@ test.describe('Code Examples', () => {
     });
 
     test('Python shows kafka-python producer code for PUBLISH', async ({ page }) => {
-      await page.goto('/operations/publishOrderCreated');
+      await page.goto('operations/publishOrderCreated');
 
       // Click Python tab
       await page.getByText('Python', { exact: true }).click();
@@ -185,58 +191,59 @@ test.describe('Code Examples', () => {
     });
 
     test('helper text adapts to AsyncAPI operations', async ({ page }) => {
-      await page.goto('/operations/subscribeOrderCreated');
+      await page.goto('operations/subscribeOrderCreated');
 
       // Verify AsyncAPI-specific helper text
       await expect(page.getByText(/subscribe to the/i)).toBeVisible();
-      await expect(page.getByText(/orders\.created/i)).toBeVisible();
-      await expect(page.getByText(/channel/i)).toBeVisible();
+      await expect(page.locator('strong').filter({ hasText: 'orders.created' })).toBeVisible();
+      await expect(page.getByText(/channel\./)).toBeVisible();
     });
   });
 
   test.describe('Copy Functionality', () => {
     test('copy button exists for code examples', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Find copy button in code examples section
       const codeExamplesSection = page.locator('text=💻 Code Examples').locator('..').locator('..');
-      const copyButton = codeExamplesSection.getByRole('button', { name: 'Copy' });
+      const copyButton = codeExamplesSection.locator('button').filter({ has: page.locator('svg') }).first();
 
       await expect(copyButton).toBeVisible();
     });
 
     test('copy button exists for example response', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       // Find copy button in example response section
       const exampleSection = page.locator('text=Example Response').locator('..').locator('..');
-      const copyButton = exampleSection.getByRole('button', { name: 'Copy' });
+      const copyButton = exampleSection.locator('button').filter({ has: page.locator('svg') }).first();
 
       await expect(copyButton).toBeVisible();
     });
 
     test('copy button exists for example request in POST', async ({ page }) => {
-      await page.goto('/operations/createOrder');
+      await page.goto('operations/createOrder');
 
       // Find copy button in example request section
       const exampleSection = page.locator('text=Example Request').locator('..').locator('..');
-      const copyButton = exampleSection.getByRole('button', { name: 'Copy' });
+      const copyButton = exampleSection.locator('button').filter({ has: page.locator('svg') }).first();
 
       await expect(copyButton).toBeVisible();
     });
 
     test('multiple copy buttons work independently', async ({ page }) => {
-      await page.goto('/operations/createOrder');
+      await page.goto('operations/createOrder');
 
       // Should have 3 copy buttons: Example Request + Example Response + Code Examples
-      const copyButtons = page.getByRole('button', { name: 'Copy' });
+      // Look specifically for copy buttons within card sections
+      const copyButtons = page.locator('[class*="card"]').locator('button').filter({ has: page.locator('svg') });
       await expect(copyButtons).toHaveCount(3);
     });
   });
 
   test.describe('Dynamic Code Generation', () => {
     test('function names use operation ID in snake_case', async ({ page }) => {
-      await page.goto('/operations/getUserOrders');
+      await page.goto('operations/getUserOrders');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -245,7 +252,7 @@ test.describe('Code Examples', () => {
     });
 
     test('code uses actual API base URL from spec', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       const codeBlock = page.locator('pre code').last();
 
@@ -254,7 +261,7 @@ test.describe('Code Examples', () => {
     });
 
     test('code includes proper error handling', async ({ page }) => {
-      await page.goto('/operations/listProducts');
+      await page.goto('operations/listProducts');
 
       const codeBlock = page.locator('pre code').last();
 

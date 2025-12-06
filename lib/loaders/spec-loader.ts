@@ -8,7 +8,7 @@
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import * as yaml from 'js-yaml';
-import { UnifiedContract } from '../normalization/unified-model';
+import { UnifiedContract } from '../normalization/unified-model.js';
 import { detectSpecType, detectSpecTypeFromPath, validateSpecVersion } from '../parsers/spec-detector';
 import { parseOpenAPIObject } from '../parsers/openapi-parser';
 import { parseAsyncAPIString } from '../parsers/asyncapi-parser';

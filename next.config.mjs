@@ -6,7 +6,7 @@ const nextConfig = {
   },
   basePath: '/open-spec-hub/demo',
   assetPrefix: '/open-spec-hub/demo/',
-  trailingSlash: true,
+  trailingSlash: false,
 };
 
 export default nextConfig;

@@ -22,7 +22,7 @@ export default defineConfig({
   // Shared settings for all tests
   use: {
     // Base URL for navigation
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3000/open-spec-hub/demo/',
 
     // Collect trace when retrying failed test
     trace: 'on-first-retry',
@@ -42,7 +42,7 @@ export default defineConfig({
   // Run dev server before tests (optional)
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3000',
+    url: 'http://localhost:3000/open-spec-hub/demo/',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

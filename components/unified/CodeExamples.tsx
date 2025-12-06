@@ -105,6 +105,7 @@ export default function CodeExamples({ operation, contract }: CodeExamplesProps)
             size="sm"
             onClick={handleCopy}
             className="gap-2"
+            aria-label={copied ? "Copied to clipboard" : "Copy code to clipboard"}
           >
             {copied ? (
               <Check className="h-4 w-4" />
