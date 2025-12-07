@@ -37,11 +37,12 @@ We translate different API protocols into a common conceptual model:
 
 ### Key Features
 - 🔍 **Unified Search** - Find anything across all your APIs
+- 🔄 **Git Sync** - Automatically fetch specs from GitHub/GitLab repositories
 - 📱 **Responsive Design** - Works on desktop and mobile
 - 🌙 **Dark Mode** - Built-in theme switching
 - 📋 **Code Examples** - Auto-generated samples in multiple languages
 - ⚡ **Static Site Generation** - Fast loading and SEO-friendly
-- 🧪 **Comprehensive Testing** - 82 E2E tests ensure reliability
+- 🧪 **Comprehensive Testing** - 83 E2E tests ensure reliability
 
 ## 🚀 Quick Start
 
@@ -67,6 +68,8 @@ Open [http://localhost:3000](http://localhost:3000) to see your API documentatio
 
 ### Adding Your Own APIs
 
+#### Option 1: Manual (Local Files)
+
 1. **Place your spec files** in the `specs/` directory:
    ```
    specs/
@@ -78,10 +81,52 @@ Open [http://localhost:3000](http://localhost:3000) to see your API documentatio
 
 2. **Restart the dev server** - your APIs will automatically appear!
 
-3. **Build for production**:
+#### Option 2: Automatic Sync (Git Repositories)
+
+Automatically fetch specs from GitHub/GitLab repositories:
+
+1. **Setup sync**:
    ```bash
-   npm run build
+   bash scripts/setup.sh
    ```
+
+2. **Configure tokens** in `.env`:
+   ```bash
+   GITHUB_TOKEN=ghp_your_token_here
+   GITLAB_TOKEN=glpat_your_token_here
+   ```
+
+3. **Add repositories** in `config/sync-config.yaml`:
+   ```yaml
+   sources:
+     - name: "my-apis"
+       platform: "github"
+       repository: "your-org/api-specs"
+       branch: "main"
+       auth:
+         token_env: "GITHUB_TOKEN"
+       files:
+         - path: "openapi/users-api.yaml"
+           type: "openapi"
+   ```
+
+4. **Sync specs**:
+   ```bash
+   python3 scripts/sync-specs.py
+   ```
+
+5. **Install cron** for automatic updates:
+   ```bash
+   bash scripts/install-cron.sh
+   ```
+
+See [README-SYNC.md](README-SYNC.md) for complete documentation.
+
+#### Build for Production
+
+```bash
+npm run build
+```
 
 ## 📁 Project Structure
 
@@ -95,6 +140,12 @@ open-spec-hub/
 │   ├── parsers/           # OpenAPI & AsyncAPI parsers
 │   ├── normalization/     # Protocol → Unified model
 │   └── utils/             # Helper functions
+├── scripts/               # Git sync automation
+│   ├── sync-specs.py     # Main sync script
+│   ├── setup.sh          # Setup automation
+│   └── install-cron.sh   # Cron installation
+├── config/
+│   └── sync-config.yaml  # Git sync configuration
 ├── specs/                 # Your API specifications
 │   ├── openapi/          # REST API specs
 │   └── asyncapi/         # Event-driven specs
@@ -114,7 +165,7 @@ npm run test:ui
 npm run test:headed
 ```
 
-Our test suite includes 82 E2E tests covering:
+Our test suite includes 83 E2E tests covering:
 - Homepage functionality
 - REST API operations
 - AsyncAPI operations  
@@ -167,6 +218,12 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 📖 Documentation
+
+- **[Git Sync Setup](README-SYNC.md)** - Automatic spec syncing from GitHub/GitLab
+- **[Development Guidelines](CLAUDE.md)** - Workflow rules and architecture
+- **[Project Status](.claude/STATUS.md)** - Current features and roadmap
 
 ## 🔗 Links
 
