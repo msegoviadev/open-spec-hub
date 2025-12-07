@@ -1,0 +1,2 @@
+# This file ensures the openapi directory is tracked by Git
+# Synced spec files will be gitignored, but the directory structure is preserved

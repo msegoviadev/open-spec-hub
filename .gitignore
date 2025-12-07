@@ -35,3 +35,10 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# API Spec Sync
+/specs/openapi/*.yaml
+/specs/openapi/*.yml
+/specs/asyncapi/*.yaml
+/specs/asyncapi/*.yml
+/logs/

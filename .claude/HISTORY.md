@@ -53,6 +53,101 @@
 
 ## 📅 Session Log (Most Recent First)
 
+### 2025-12-07 15:00 - API Spec Git Sync Feature Implementation
+
+**Session Focus**: Implement automatic syncing of API specifications from GitHub/GitLab repositories
+
+**Customer Request**: "I believe you can always use repository just after gitlab.com/ and raw.githubusercontent.com/ in both cases"
+
+**Status**: ✅ COMPLETE
+
+**Achievements**:
+- ✅ Implemented complete API spec sync feature with all planned functionality
+- ✅ Created Python sync script with full error handling and validation
+- ✅ Added support for both GitHub and GitLab (including nested groups)
+- ✅ Implemented authentication via personal access tokens
+- ✅ Created setup and cron installation scripts
+- ✅ Added comprehensive documentation and examples
+- ✅ Integrated with existing TypeScript application seamlessly
+- ✅ Tested all functionality successfully
+
+**Key Technical Decisions**:
+- **Repository field**: Merged owner/repo into single `repository` field for cleaner config
+- **URL construction**: Simplified to use repository directly in URL paths
+- **Authentication**: Token-based only (no SSH, no OAuth complexity)
+- **Scheduling**: Controlled entirely by cron (not in config file)
+- **Error handling**: Skip failures and continue (resilient sync)
+- **File conflicts**: Last one wins (overwrite behavior)
+- **Validation**: YAML syntax validation before saving files
+- **Logging**: Minimal with timestamps (errors + summary only)
+- **Security**: Tokens in .env (gitignored), never logged or printed
+
+**Files Created**:
+- `.env.example` - Token template with setup instructions
+- `config/sync-config.yaml` - Example configuration with commented examples
+- `scripts/sync-specs.py` - Main Python sync script (~300 lines)
+  - Core functions: load_env, load_config, validate_config, build_url, get_auth_headers, fetch_file, validate_yaml_syntax, sync_file, sync_source, sync_all
+  - CLI support: --dry-run, --config, --help
+  - Error handling: 404, 401/403, timeout, invalid YAML, missing tokens
+  - Exit codes: 0 (success), 1 (some errors), 2 (fatal errors)
+- `scripts/requirements.txt` - Python dependencies (requests, PyYAML, python-dotenv)
+- `scripts/setup.sh` - One-command setup automation
+  - Creates directories, installs dependencies, copies .env template
+  - Checks existing directories before creating
+- `scripts/install-cron.sh` - Cron installation with schedule selection
+  - Prompts for schedule, handles existing jobs, provides examples
+  - Supports common schedules: 30min, 15min, hourly, daily
+- `README-SYNC.md` - Comprehensive user documentation
+  - Quick start guide, token setup, configuration reference
+  - Usage examples, troubleshooting, security considerations
+- `specs/openapi/.gitkeep` - Preserve directory structure in Git
+- `specs/asyncapi/.gitkeep` - Preserve directory structure in Git
+
+**Files Modified**:
+- `.gitignore` - Added specs/, logs/, .env exclusions
+
+**URL Construction Logic**:
+- GitHub: `https://raw.githubusercontent.com/{repository}/{branch}/{file_path}`
+- GitLab: `https://gitlab.com/{repository}/-/raw/{branch}/{file_path}`
+- No parsing needed - repository field used directly in URL
+
+**Authentication Headers**:
+- GitHub: `{"Authorization": "token {token}"}`
+- GitLab: `{"PRIVATE-TOKEN": token}`
+
+**Testing Results**:
+- ✅ Dry-run mode shows correct files to be fetched
+- ✅ Actual sync fetches and saves files successfully
+- ✅ YAML validation catches syntax errors
+- ✅ Error handling works for missing tokens, 404s, auth failures
+- ✅ Setup script creates all necessary files and directories
+- ✅ Cron installation works with custom schedules
+- ✅ All scripts are executable and functional
+- ✅ Integration with TypeScript app seamless
+
+**Integration Points**:
+- Synced specs automatically available to TypeScript app
+- No changes needed to existing build process
+- Files saved to specs/openapi/ and specs/asyncapi/ as expected
+- Seamless workflow: cron sync → build → deployment
+
+**Duration**: 2 hours
+
+**Next Steps**:
+- User can now configure their own repositories and tokens
+- Ready for production use
+- Consider MCP server integration as future enhancement
+
+**Lessons Learned**:
+- Simplified URL construction by using repository field directly
+- Python's argparse provides clean CLI interface
+- Cron job management requires careful handling of existing entries
+- Error handling philosophy: "skip failures and continue" works well for automated tasks
+- Security best practices: tokens in .env, never in config or logs
+- Testing with dry-run mode prevents accidental file changes during development
+
+---
+
 ### 2025-11-18 10:30 - Domain and GitHub Migration
 **Session Focus**: Update all references from old domain/GitHub to new ones
 **Customer Request**: "the current repository is configured to expose the project to github pages under marcossegovia.me/open-spec-hub, now I have adquited a new domain and instead it should be to msegovia.dev/open-spec-hub" + "all the references to github.com/marcossegovia should be now to github.com/msegoviadev"

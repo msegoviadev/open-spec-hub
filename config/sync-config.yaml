@@ -1,0 +1,57 @@
+# API Spec Sync Configuration
+# NOTE: Sync schedule is configured in crontab, not here
+
+sources:
+  # Example: Public GitHub repository
+  - name: "swagger-petstore"
+    platform: "github"
+    repository: "swagger-api/swagger-petstore"
+    branch: "master"
+    files:
+      - path: "src/main/resources/openapi.yaml"
+        type: "openapi"
+        destination: "petstore.yaml"
+
+  # Private GitHub repository - Drinks Store AsyncAPI
+  # Note: Repository 'open-spec-hub-files-test' doesn't exist yet
+  # Either create it, or update this to use an existing repo
+  - name: "drinks-store"
+    platform: "github"
+    repository: "msegoviadev/open-spec-hub-files-test"
+    branch: "main"
+    auth:
+      token_env: "GITHUB_TOKEN"
+    files:
+      - path: "contracts/drinks-store.yaml"
+        type: "asyncapi"
+        destination: "drinks-store.yaml"
+
+  # Example: Private GitHub repository
+  # Uncomment and configure your own repositories below
+  #
+  # - name: "company-apis"
+  #   platform: "github"
+  #   repository: "your-company/api-specs"
+  #   branch: "main"
+  #   auth:
+  #     token_env: "GITHUB_TOKEN"
+  #   files:
+  #     - path: "openapi/users-api.yaml"
+  #       type: "openapi"
+  #     
+  #     - path: "openapi/products-api.yaml"
+  #       type: "openapi"
+  #       destination: "products.yaml"
+
+  # Example: Private GitLab repository (supports nested groups)
+  #
+  # - name: "gitlab-internal"
+  #   platform: "gitlab"
+  #   repository: "company/backend/api-specs"
+  #   branch: "production"
+  #   auth:
+  #     token_env: "GITLAB_TOKEN"
+  #   files:
+  #     - path: "specs/orders.yaml"
+  #       type: "openapi"
+  #       destination: "orders-api.yaml"
